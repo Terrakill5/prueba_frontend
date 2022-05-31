@@ -1,26 +1,32 @@
 <template>
-  <section>
-    <nav>
-      <router-link to="/register">Register</router-link>
-      {{ " " }}
-      <router-link to="/sign-in">Sign In</router-link>
-      {{ " " }}
-      <router-link to="/pizzastore">Pizza</router-link>
-      <button @click="handleSignOut" v-if="isLoggedIn">Sign out</button>
-      <!-- boton aparece si el usuario esta logeado -->
-    </nav>
+  <div class="container">
+    <section class="left">Left</section>
+    <section class="right">
+      <nav>
+        <router-link to="/register">Register</router-link>
+        {{ " " }}
+        <router-link to="/sign-in">Sign In</router-link>
+        {{ " " }}
+        <router-link to="/pizzastore">Pizza</router-link>
+        <button @click="handleSignOut" v-if="isLoggedIn">Sign out</button>
+        <!-- boton aparece si el usuario esta logeado -->
+      </nav>
 
-    <router-view v-slot="{ Component }">
-      <transition
-        enter-active-class="animate__animated animate__fadeInLeft"
-        leave-active-class="animate__animated animate__fadeOutLeft"
-        mode="out-in"
-      >
-        <!--  en la transicion, se usa el nombre para poder nombrar los estilos con fade, luego con el mode, se usa out-in para primero desaparezca el primer elemento y luego sale el segundo, para evitar solapamiento -->
-        <component :is="Component" />
-      </transition>
-    </router-view>
-  </section>
+      <div class="right__center">
+        <router-view v-slot="{ Component }">
+          <transition
+            enter-active-class="animate__animated animate__fadeInLeft"
+            leave-active-class="animate__animated animate__fadeOutLeft"
+            mode="out-in"
+          >
+            <!--  en la transicion, se usa el nombre para poder nombrar los estilos con fade, luego con el mode, se usa out-in para primero desaparezca el primer elemento y luego sale el segundo, para evitar solapamiento -->
+            <component :is="Component" />
+          </transition>
+        </router-view>
+      </div>
+
+    </section>
+  </div>
 </template>
 
 <script setup>
@@ -52,7 +58,23 @@ const handleSignOut = () => {
 </script>
 
 <style>
-.fade-enter-from,
+  body {
+  margin: 0;
+}
+</style>
+
+<style scoped>
+.container {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* fracciona en dos la pantalla principal */
+  height: 100vh; /* hace que la altura sea igual a lo que se ve en pantalla  */
+}
+
+.left {
+  background-color: aqua;
+}
+
+/* .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
 }
@@ -60,5 +82,5 @@ const handleSignOut = () => {
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.5s ease-out;
-}
+} */
 </style>

@@ -1,6 +1,8 @@
 <template>
 <div>
-  <h1>Create an Account</h1>
+  <img src="../../../img/logo_principal_editado.jpg" alt="logo principal de la pagina">
+  <h1>Bienvenido</h1>
+  <h2>Crea una cuenta para continuar a nuestras tiendas</h2>
   <p><input type="text" placeholder="Email" v-model="email" /></p>
   <p><input type="password" placeholder="Password" v-model="password" /></p>
   <p><button @click="register">Submit</button></p>
@@ -38,3 +40,9 @@ const signInWithGoogle = () => {
         })
 };
 </script>
+
+<style scoped>
+div {
+  text-align: center;
+}
+</style>
