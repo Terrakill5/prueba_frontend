@@ -34,7 +34,7 @@ const router = createRouter({
       component: () => import("../src/pages/auth/SignIn.vue"),
     },
     {
-      path: "/notFound(.*)",
+      path: "/:notFound(.*)",
       component: () => import("../src/pages/NotFound.vue"),
     },
     {
