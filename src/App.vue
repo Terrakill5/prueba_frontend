@@ -2,64 +2,65 @@
   <div class="container">
     <section class="left">Left</section>
     <section class="right">
-      <nav>
-        <router-link to="/register">Register</router-link>
-        {{ " " }}
-        <router-link to="/sign-in">Sign In</router-link>
-        {{ " " }}
-        <router-link to="/pizzastore">Pizza</router-link>
-        <button @click="handleSignOut" v-if="isLoggedIn">Sign out</button>
-        <!-- boton aparece si el usuario esta logeado -->
-      </nav>
+      <div class="enfoque">
+        <!-- <div class="theHeader">
+          <the-header :auth="auth" :isLoggedIn="isLoggedIn"></the-header>
+        </div> -->
+        <base-modal></base-modal>
 
-      <div class="right__center">
-        <router-view v-slot="{ Component }">
-          <transition
-            enter-active-class="animate__animated animate__fadeInLeft"
-            leave-active-class="animate__animated animate__fadeOutLeft"
-            mode="out-in"
-          >
-            <!--  en la transicion, se usa el nombre para poder nombrar los estilos con fade, luego con el mode, se usa out-in para primero desaparezca el primer elemento y luego sale el segundo, para evitar solapamiento -->
-            <component :is="Component" />
-          </transition>
-        </router-view>
+        <div class="right__center">
+          <router-view v-slot="{ Component }">
+            <transition
+              enter-active-class="animate__animated animate__fadeInLeft"
+              leave-active-class="animate__animated animate__fadeOutLeft"
+              mode="out-in"
+            >
+              <!--  en la transicion, se usa el nombre para poder nombrar los estilos con fade, luego con el mode, se usa out-in para primero desaparezca el primer elemento y luego sale el segundo, para evitar solapamiento -->
+              <component :is="Component" />
+            </transition>
+          </router-view>
+        </div>
       </div>
-
     </section>
   </div>
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
-import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
-import { useRouter } from "vue-router";
-
-const router = useRouter();
-const isLoggedIn = ref(false); //para  verificar que esta logeado
-let auth;
-onMounted(() => {
+import BaseModal from "./ui/BaseModal.vue";
+//import TheHeader from "./components/TheHeader.vue";
+import { useAuthStore } from "./store/Auth.js";
+import { onMounted} from "vue";
+//import { getAuth, onAuthStateChanged } from "firebase/auth";
+const usarAuth = useAuthStore();
+//const isLoggedIn = ref(false); para  verificar que esta logeado
+//let auth;
+/* onMounted(() => {
   //fase donde se comprueba si el usuario esta logeado
   auth = getAuth(); //recibimos de firebase el usuario en cuestion
   onAuthStateChanged(auth, (user) => {
     //cada vez que se cambie el estado del usuario, se modifica en la pagina si esta o no logeado
     if (user) {
-      isLoggedIn.value = true;
+      usarAuth.cambiarLog(true);
+      //isLoggedIn.value = true;
     } else {
-      isLoggedIn.value = false;
+      usarAuth.cambiarLog(false);
+      //isLoggedIn.value = false;
     }
   });
-});
+}); */
 
-const handleSignOut = () => {
-  signOut(auth).then(() => {
-    router.push("/"); //lo envia a la pagina principal
-  });
-};
+onMounted(() => {
+  usarAuth.comprobacionAuth;
+})
 </script>
 
 <style>
-  body {
+body {
   margin: 0;
+}
+
+a {
+  text-decoration: none;
 }
 </style>
 
@@ -72,6 +73,14 @@ const handleSignOut = () => {
 
 .left {
   background-color: aqua;
+}
+
+.enfoque {
+  padding: 10px 0 30px 0;
+}
+
+.theHeader {
+  text-align: center;
 }
 
 /* .fade-enter-from,

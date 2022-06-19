@@ -1,5 +1,5 @@
 import { createApp } from "vue";
-//import { createPinia } from "pinia";
+import { createPinia } from "pinia";
 import App from "./App.vue";
 import router from "./router.js";
 
@@ -18,15 +18,15 @@ const firebaseConfig = {
   storageBucket: "pizzeria-de7c0.appspot.com",
   messagingSenderId: "577530152561",
   appId: "1:577530152561:web:ab205eb8a2b231c8a5fdd0",
-  measurementId: "G-NBMEXYH3G0"
+  measurementId: "G-NBMEXYH3G0",
 };
 
 // Initialize Firebase
 initializeApp(firebaseConfig);
 
-//const pinia = createPinia();
+const pinia = createPinia();
 
 const app = createApp(App);
-//app.use(pinia);
+app.use(pinia);
 app.use(router);
 app.mount("#app");
