@@ -87,10 +87,6 @@ h1 {
   margin-bottom: 10px;
 }
 
-.area {
-  margin-top: 45px;
-}
-
 .gris_ligero {
   color: darkgray;
   margin-top: 5px;

@@ -1,6 +1,7 @@
 <template>
-  <div class="area">
-    <img
+  <div class="area-flex">
+    <div class="area-hijo">
+      <img
       src="../../../img/logo_principal_editado.jpg"
       alt="logo principal de la pagina"
     />
@@ -28,6 +29,8 @@
     <p>
       <boton-submit @click="signInWithGoogle">Logearse con Google</boton-submit>
     </p>
+    </div>
+    
   </div>
 </template>
 
@@ -70,9 +73,14 @@ h1 {
   margin-bottom: 10px;
 }
 
-.area {
-  margin-top: 50px;
-  
+.area-flex {
+  width: 100%;
+  height: 100%;
+  padding: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
 }
 
 .gris_ligero {

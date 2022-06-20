@@ -130,6 +130,10 @@ h1 {
 .grupoInput svg {
   position: absolute;
   top: 6px;
-  right: calc(50% + 75px);
+  right: calc(50% + 27px);
+}
+
+@media (max-width: 768px) {
+  
 }
 </style>

@@ -68,9 +68,16 @@ a {
 
 <style scoped>
 .container {
+  width: 100%;
   display: grid;
   grid-template-columns: 1fr 1fr; /* fracciona en dos la pantalla principal */
   height: 100vh; /* hace que la altura sea igual a lo que se ve en pantalla  */
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .imagenPizza {
@@ -78,12 +85,12 @@ a {
   height:100%;
 }
 
-.enfoque {
-  padding: 10px 0 30px 0;
-}
-
 .theHeader {
   text-align: center;
+}
+
+.right__center {
+  height: 800px;
 }
 
 /* .fade-enter-from,
@@ -100,6 +107,16 @@ a {
   .left {
     display: none;
   }
+}
+
+@media (min-width:365px) and (max-width: 450px) {
+  .container {
+    display:block;
+  }
+}
+
+@media (min-width: 1024px) {
+
 }
 </style>
 
