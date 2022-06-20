@@ -25,7 +25,6 @@
     </div>
     <p><boton-submit @click="register">Registrarse</boton-submit></p>
     <p><boton-submit @click="logearse">Logearse con email</boton-submit></p>
-    <!-- <base-modal v-if="show && condicion=='login'" :show="show" :condicion="'login'"></base-modal> -->
     <p>
       <boton-submit @click="signInWithGoogle">Logearse con Google</boton-submit>
     </p>
@@ -36,32 +35,17 @@
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "../../store/Auth.js";
-//import BaseModal from "../../ui/BaseModal.vue";
 import BotonSubmit from "../../ui/BotonSubmit.vue";
 const router = useRouter();
 const usarAuth = useAuthStore();
 const email = ref("");
 const password = ref("");
-//let show = ref(false);
-//let condicion = ref("");
-async function register () {
+async function register() {
   await usarAuth.register(email.value, password.value);
-  //show.value = true;
-  //condicion.value = "login";
   if (usarAuth.permite) {
     router.push("/pizzastore");
   }
   usarAuth.falsoPagina();
-
-  // Necesita .value debido al ref()
-  /* const auth = getAuth(); // de firebase/auth
-  createUserWithEmailAndPassword(auth, email.value, password.value).then(() => {
-    show.value = true;
-    condicion.value = "login";
-    console.log("Registro completado");
-    console.log(auth.currentUser);
-    router.push("/pizzastore"); //redirecciona a la pizzeria
-  }); */
 }
 
 const logearse = () => {
@@ -74,8 +58,6 @@ async function signInWithGoogle() {
     router.push("/pizzastore");
   }
   usarAuth.falsoPagina();
-  //show.value = true;
-  //condicion.value = "login";
 }
 </script>
 
@@ -90,6 +72,7 @@ h1 {
 
 .area {
   margin-top: 50px;
+  
 }
 
 .gris_ligero {
@@ -104,7 +87,6 @@ h1 {
 .grupoInput svg {
   position: absolute;
   top: 6px;
-  /* right: 260px; */
   right: calc(50% - 80px);
 }
 
@@ -115,5 +97,8 @@ input {
 svg {
   height: 15px;
   width: 15px;
+}
+
+@media (max-width: 450px) {
 }
 </style>

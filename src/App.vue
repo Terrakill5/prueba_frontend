@@ -1,6 +1,8 @@
 <template>
   <div class="container">
-    <section class="left">Left</section>
+    <section class="left">
+      <img class="imagenPizza" src="https://thefoodtech.com/wp-content/uploads/2022/02/pizza-con-diversos-ingredientes.jpg" alt="Pizza de presentacion">
+    </section>
     <section class="right">
       <div class="enfoque">
         <!-- <div class="theHeader">
@@ -71,8 +73,9 @@ a {
   height: 100vh; /* hace que la altura sea igual a lo que se ve en pantalla  */
 }
 
-.left {
-  background-color: aqua;
+.imagenPizza {
+  width:100%;
+  height:100%;
 }
 
 .enfoque {
@@ -92,4 +95,11 @@ a {
 .fade-leave-active {
   transition: opacity 0.5s ease-out;
 } */
+
+@media (max-width: 450px) {
+  .left {
+    display: none;
+  }
+}
 </style>
+

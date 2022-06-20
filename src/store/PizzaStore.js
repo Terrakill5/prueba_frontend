@@ -126,15 +126,5 @@ export const useStore = defineStore("pizza", {
     obtenerTiendaIndividual(id) {
       return this.tiendas.filter((obj) => obj.id == id);
     },
-
-    /* filtro(incluye) {
-            return 
-        } */
-    /* cambiarNombreTienda() {
-            this.tiendas = !this.show;
-        },
-        ponerCondicion(variable) {
-            this.condicion = variable; 
-        } */
   },
 });

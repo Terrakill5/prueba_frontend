@@ -1,6 +1,5 @@
 import { defineStore } from "pinia";
 import { useStore } from "./Modal.js";
-//import { useRouter } from "vue-router";
 import {
   getAuth,
   onAuthStateChanged,
@@ -34,48 +33,43 @@ export const useAuthStore = defineStore("auth", {
         //cada vez que se cambie el estado del usuario, se modifica en la pagina si esta o no logeado
         if (user) {
           this.cambiarLog(true);
-          //isLoggedIn.value = true;
         } else {
           this.cambiarLog(false);
-          //isLoggedIn.value = false;
         }
       });
     },
     async register(email, password) {
-      //const router = useRouter();
-      // Necesita .value debido al ref()
+      const store = useStore();
       this.auth = getAuth(); //recibimos de firebase el usuario en cuestion
       await createUserWithEmailAndPassword(this.auth, email, password).then(
         () => {
           this.cambiarLog(true);
           console.log("Registro completado");
-          //console.log(this.auth.currentUser);
+          store.cambiarMostrar();
+          store.ponerCondicion("logeo");
+          setTimeout(function () {
+            store.cambiarMostrar();
+          }, 2000);
           this.cambiarPagina = true;
-          //router.push("/pizzastore");
         }
       );
     },
     async logear(email, password) {
-      //const router = useRouter();
       const store = useStore();
       let errMsg;
-      // Necesita .value debido al ref()
       this.auth = getAuth(); //recibimos de firebase el usuario en cuestion
       await signInWithEmailAndPassword(this.auth, email, password)
         .then(() => {
           this.cambiarLog(true);
           console.log("Te has logeado exitosamente!");
-          //show.value = true;
           store.cambiarMostrar();
-          //condicion.value = "logeo";
+
           store.ponerCondicion("logeo");
           setTimeout(function () {
-            //show.value = !show.value;
             store.cambiarMostrar();
           }, 2000);
-          //console.log(this.auth.currentUser);
+
           this.cambiarPagina = true;
-          //router.push("/pizzastore"); //redirecciona a la pizzeria
         })
         .catch((error) => {
           //en caso el correo sea invalido
@@ -108,18 +102,15 @@ export const useAuthStore = defineStore("auth", {
         });
     },
     async signInWithGoogle() {
-      //const router = useRouter();
-      //console.log(router);
       const store = useStore();
       const provider = new GoogleAuthProvider();
       this.auth = getAuth(); //recibimos de firebase el usuario en cuestion
       await signInWithPopup(this.auth, provider)
         .then((result) => {
           store.cambiarMostrar();
-          //condicion.value = "logeo";
+
           store.ponerCondicion("logeo");
           setTimeout(function () {
-            //show.value = !show.value;
             store.cambiarMostrar();
           }, 2000);
           console.log(result.user);
@@ -132,8 +123,6 @@ export const useAuthStore = defineStore("auth", {
         .catch(() => {
           //handle error
         });
-
-      //router.push("/pizzastore");
     },
   },
 });

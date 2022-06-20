@@ -41,13 +41,13 @@
 </template>
 
 <script setup>
-//import { signOut } from "firebase/auth";
 import { defineProps, defineEmits } from "vue";
 import router from "../router.js";
 import { useAuthStore } from "../store/Auth.js";
+import { useStore } from "../store/Modal.js";
 const useAuth = useAuthStore();
-//import { useRouter } from "vue-router";
-//const router = useRouter();
+const store = useStore();
+
 const pizzaProps = defineProps({
   show: {
     type: Boolean,
@@ -63,7 +63,20 @@ const tryClose = () => {
 
 const handleSignOut = () => {
   useAuth.handleSignOut();
+  store.cambiarMostrar();
+  store.ponerCondicion("cerrarSesion");
+  setTimeout(function () {
+    store.cambiarMostrar();
+  }, 2000);
   router.push("/");
+};
+
+const clickCuenta = () => {
+  store.cambiarMostrar();
+  store.ponerCondicion("contrasena");
+  setTimeout(function () {
+    store.cambiarMostrar();
+  }, 2000);
 };
 </script>
 
