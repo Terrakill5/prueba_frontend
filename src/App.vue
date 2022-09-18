@@ -54,13 +54,10 @@ const router = useRouter();
 }); */
 
 onMounted(() => {
-  router.beforeEach(async (to,from)=> {
+  router.beforeEach(async (to)=> {
     if (to.name === "register" && localStorage.getItem("token")) {
       router.push("/pizzastore");
     } 
-    if (to.name !== "register" && !from.redirectedFrom  && !localStorage.getItem("token") || to.name === from.name) {
-      router.push("/");
-    }
     
   })
 })
