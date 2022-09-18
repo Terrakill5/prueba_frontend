@@ -1,19 +1,23 @@
 import { defineStore } from "pinia";
 import { useStore } from "./Modal.js";
-import {
-  getAuth,
-  onAuthStateChanged,
-  createUserWithEmailAndPassword,
+/* import {
+  //getAuth,
+  //onAuthStateChanged,
+  //createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-  GoogleAuthProvider,
-  signInWithPopup,
-  signOut,
-} from "firebase/auth";
+  //GoogleAuthProvider,
+  //signInWithPopup,
+  //signOut,
+} from "firebase/auth"; */
+let timer;
 export const useAuthStore = defineStore("auth", {
   state: () => ({
     isLog: false,
     auth: null,
     cambiarPagina: false,
+    token: "",
+    id: "",
+    didAutoLogout: false,
   }),
   getters: {
     estado: (state) => state.isLog,
@@ -27,7 +31,19 @@ export const useAuthStore = defineStore("auth", {
     falsoPagina() {
       this.cambiarPagina = false;
     },
-    comprobacionAuth() {
+    setUser(token, id) {
+      this.token = token;
+      this.id = id;
+      this.didAutoLogout = false;
+    },
+    setAutoLogout(valor) {
+      this.didAutoLogout = valor;
+    },
+    autoLogout() {
+      this.handleSignOut;
+      this.setAutoLogout;
+    },
+    /* comprobacionAuth() {
       this.auth = getAuth(); //recibimos de firebase el usuario en cuestion
       onAuthStateChanged(this.auth, (user) => {
         //cada vez que se cambie el estado del usuario, se modifica en la pagina si esta o no logeado
@@ -37,8 +53,8 @@ export const useAuthStore = defineStore("auth", {
           this.cambiarLog(false);
         }
       });
-    },
-    async register(email, password) {
+    }, */
+    /* async register(email, password) {
       const store = useStore();
       this.auth = getAuth(); //recibimos de firebase el usuario en cuestion
       await createUserWithEmailAndPassword(this.auth, email, password).then(
@@ -53,8 +69,8 @@ export const useAuthStore = defineStore("auth", {
           this.cambiarPagina = true;
         }
       );
-    },
-    async logear(email, password) {
+    }, */
+    /* async logear(email, password) {
       const store = useStore();
       let errMsg;
       this.auth = getAuth(); //recibimos de firebase el usuario en cuestion
@@ -90,18 +106,90 @@ export const useAuthStore = defineStore("auth", {
               break;
           }
         });
-    },
+    }, */
     async handleSignOut() {
-      this.auth = getAuth(); //recibimos de firebase el usuario en cuestion
-      await signOut(this.auth)
-        .then(() => {
-          this.cambiarLog(false);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      localStorage.removeItem("token");
+      localStorage.removeItem("userId");
+      localStorage.removeItem("tokenExpiration");
+
+      clearTimeout(timer); //limpia el timer de la expiracion cada vez que deslogea
+      this.setUser("", "");
+      this.cambiarLog(false);
     },
-    async signInWithGoogle() {
+    async auth(email, password, mode) {
+      let url =
+        "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyBrth4YTWZBocqzBGsc_sc1XembnR7Y3eI";
+      if (mode === "register") {
+        url =
+          "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyBrth4YTWZBocqzBGsc_sc1XembnR7Y3eI";
+      }
+      const response = await fetch(url, {
+        method: "POST",
+        body: JSON.stringify({
+          email: email,
+          password: password,
+          returnSecureToken: true,
+        }),
+      });
+      const resData = await response.json();
+      console.log(resData);
+      if (!response.ok) {
+        console.log(resData);
+        const error = new Error(resData.message || "Failed to authenticate.");
+        throw error;
+      } else {
+        const expiresIn = +resData.expiresIn * 1000; //Transforma en numero la duracion del token en milisegundos
+        //const expiresIn = 5000;
+        const expirationDate = new Date().getTime() + expiresIn; // esto hace que tenga una duracion de 1 hora el token
+        localStorage.setItem("token", resData.idToken); //Se guarda en localStorage el token y userId al volver a recargar la pagina para no tener que logearse nuevamente
+        localStorage.setItem("userId", resData.localId);
+        localStorage.setItem("tokenExpiration", expirationDate);
+
+        timer = setTimeout(function () {
+          this.handleSignOut();
+        }, expiresIn); //crea un timer cada vez que se logea para deslogearlo pasado la hora
+
+        this.setUser(resData.idToken, resData.localId);
+        const store = useStore();
+        this.cambiarLog(true);
+        if (mode === "register") {
+          console.log("Registro completado");
+          store.cambiarMostrar();
+          store.ponerCondicion("logeo");
+          setTimeout(function () {
+            store.cambiarMostrar();
+          }, 2000);
+        } else {
+          console.log("Registro completado");
+          store.cambiarMostrar();
+          store.ponerCondicion("logeo");
+          setTimeout(function () {
+            store.cambiarMostrar();
+          }, 2000);
+        }
+        this.cambiarPagina = true;
+      }
+    },
+    tryLogin() {
+      const token = localStorage.getItem("token");
+      const userId = localStorage.getItem("userId");
+      const tokenExpiration = localStorage.getItem("tokenExpiration");
+
+      const expiresIn = +tokenExpiration - new Date().getTime();
+
+      if (expiresIn < 0) {
+        return;
+      }
+
+      setTimeout(function () {
+        this.handleSignOut();
+      }, expiresIn);
+
+      if (token && userId) {
+        this.setUser(token, userId);
+      }
+    },
+    /* async signInWithGoogle() {
       const store = useStore();
       const provider = new GoogleAuthProvider();
       this.auth = getAuth(); //recibimos de firebase el usuario en cuestion
@@ -123,6 +211,6 @@ export const useAuthStore = defineStore("auth", {
         .catch(() => {
           //handle error
         });
-    },
+    }, */
   },
 });

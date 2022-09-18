@@ -30,10 +30,12 @@
 <script setup>
 import BaseModal from "./ui/BaseModal.vue";
 //import TheHeader from "./components/TheHeader.vue";
-import { useAuthStore } from "./store/Auth.js";
+//import { useAuthStore } from "./store/Auth.js";
 import { onMounted} from "vue";
+import { useRouter } from "vue-router";
+const router = useRouter();
 //import { getAuth, onAuthStateChanged } from "firebase/auth";
-const usarAuth = useAuthStore();
+//const usarAuth = useAuthStore();
 //const isLoggedIn = ref(false); para  verificar que esta logeado
 //let auth;
 /* onMounted(() => {
@@ -52,7 +54,15 @@ const usarAuth = useAuthStore();
 }); */
 
 onMounted(() => {
-  usarAuth.comprobacionAuth;
+  router.beforeEach(async (to,from)=> {
+    if (to.name === "register" && localStorage.getItem("token")) {
+      router.push("/pizzastore");
+    } 
+    if (to.name !== "register" && !from.redirectedFrom  && !localStorage.getItem("token") || to.name === from.name) {
+      router.push("/");
+    }
+    
+  })
 })
 </script>
 

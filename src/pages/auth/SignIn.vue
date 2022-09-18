@@ -50,7 +50,7 @@ const email = ref("");
 const password = ref("");
 const errMsg = ref(); //Mensaje de error
 async function register () {
- await usarAuth.logear(email.value, password.value);
+ await usarAuth.auth(email.value, password.value,"login");
   if (usarAuth.permite) {
     router.push("/pizzastore");
   }

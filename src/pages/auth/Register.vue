@@ -102,7 +102,7 @@ const comprobacionEmail = () => {
 };
 
 async function register() {
-  await usarAuth.register(email.value, password.value);
+  await usarAuth.auth(email.value, password.value,'register');
   if (usarAuth.permite) {
     router.push("/pizzastore");
   }
